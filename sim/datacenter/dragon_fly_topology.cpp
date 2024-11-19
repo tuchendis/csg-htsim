@@ -6,7 +6,7 @@
 #include <iostream>
 #include "main.h"
 #include "queue.h"
-#include "switch.h"
+#include "roce_switch.h"
 #include "compositequeue.h"
 #include "prioqueue.h"
 #include "queue_lossless.h"

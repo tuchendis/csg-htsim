@@ -1,7 +1,7 @@
 CC = g++
-CFLAGS = -Wall -std=c++11 -g -Wsign-compare
+CFLAGS = -Wall -std=c++11 -O0 -g -Wsign-compare
 #CFLAGS += -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined
-CFLAGS += -O2  
+#CFLAGS += -O2
 CRT=`pwd`
 INCLUDE= -I/$(CRT)/.. -I$(CRT) 
 LIB=-L..
@@ -21,8 +21,8 @@ htsim_eqds: main_eqds.o firstfit.o ../libhtsim.a vl2_topology.o fat_tree_topolog
 	$(CC) $(CFLAGS) firstfit.o main_eqds.o vl2_topology.o fat_tree_topology.o fat_tree_switch.o bcube_topology.o connection_matrix.o oversubscribed_fat_tree_topology.o shortflows.o star_topology.o multihomed_fat_tree_topology.o $(LIB) -lhtsim -o htsim_eqds
 
 
-htsim_roce: main_roce.o firstfit.o ../libhtsim.a vl2_topology.o fat_tree_topology.o bcube_topology.o connection_matrix.o oversubscribed_fat_tree_topology.o shortflows.o multihomed_fat_tree_topology.o star_topology.o fat_tree_switch.o
-	$(CC) $(CFLAGS) firstfit.o main_roce.o vl2_topology.o fat_tree_topology.o fat_tree_switch.o bcube_topology.o connection_matrix.o oversubscribed_fat_tree_topology.o shortflows.o star_topology.o multihomed_fat_tree_topology.o $(LIB) -lhtsim -o htsim_roce
+htsim_roce: main_roce.o firstfit.o ../libhtsim.a vl2_topology.o fat_tree_topology.o bcube_topology.o connection_matrix.o oversubscribed_fat_tree_topology.o shortflows.o multihomed_fat_tree_topology.o star_topology.o fat_tree_switch.o roce_topology.o roce_switch.o
+	$(CC) $(CFLAGS) firstfit.o main_roce.o vl2_topology.o fat_tree_topology.o fat_tree_switch.o bcube_topology.o connection_matrix.o oversubscribed_fat_tree_topology.o shortflows.o star_topology.o multihomed_fat_tree_topology.o roce_topology.o roce_switch.o $(LIB) -lhtsim -o htsim_roce
 
 htsim_hpcc: main_hpcc.o firstfit.o ../libhtsim.a vl2_topology.o fat_tree_topology.o bcube_topology.o connection_matrix.o oversubscribed_fat_tree_topology.o shortflows.o multihomed_fat_tree_topology.o star_topology.o fat_tree_switch.o
 	$(CC) $(CFLAGS) firstfit.o main_hpcc.o vl2_topology.o fat_tree_topology.o fat_tree_switch.o bcube_topology.o connection_matrix.o oversubscribed_fat_tree_topology.o shortflows.o star_topology.o multihomed_fat_tree_topology.o $(LIB) -lhtsim -o htsim_hpcc
@@ -77,6 +77,9 @@ subflow_control.o: subflow_control.cpp subflow_control.h  ${DEPS}
 fat_tree_topology.o: fat_tree_topology.cpp fat_tree_topology.h topology.h ${DEPS}
 	$(CC) $(INCLUDE) $(CFLAGS) -c fat_tree_topology.cpp
 
+roce_topology.o: roce_topology.cpp roce_topology.h ${DEPS}
+	$(CC) $(INCLUDE) $(CFLAGS) -c roce_topology.cpp
+
 main_waterfill.o: main_waterfill.cpp connection_matrix.h connection_matrix.cpp ${DEPS}
 	$(CC) $(INCLUDE) $(CFLAGS) -c main_waterfill.cpp
 
@@ -91,6 +94,9 @@ multihomed_fat_tree_topology.o: multihomed_fat_tree_topology.cpp multihomed_fat_
 
 fat_tree_switch.o: fat_tree_switch.h fat_tree_switch.cpp ${DEPS}
 	$(CC) $(INCLUDE) $(CFLAGS) -c fat_tree_switch.cpp
+
+roce_switch.o: roce_switch.h roce_topology.cpp ${DEPS}
+	$(CC) $(INCLUDE) $(CFLAGS) -c roce_switch.cpp
 
 main_eqds.o: main_eqds.cpp
 	$(CC) $(INCLUDE) $(CFLAGS) -c main_eqds.cpp 

@@ -10,7 +10,7 @@
 #include "topology.h"
 #include "logfile.h"
 #include "eventlist.h"
-#include "switch.h"
+#include "roce_switch.h"
 #include <ostream>
 
 //Dragon Fly parameters
