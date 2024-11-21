@@ -54,8 +54,8 @@ void RoCESwitch::receivePacket(Packet &pkt) {
 
 void RoCESwitch::addHostPort(int dst, int flowid, PacketSink *transport) {
     Route* rt = new Route();
-    rt->push_back(_topo->queues[_id][dst][0]);
-    rt->push_back(_topo->pipes[_id][dst][0]);
+    rt->push_back(_topo->_queues[_id][dst][0]);
+    rt->push_back(_topo->_pipes[_id][dst][0]);
     rt->push_back(transport);
     _fib->addHostRoute(dst, rt, flowid);
 }

@@ -11,6 +11,9 @@
 #include "loggers.h"
 #include "network.h"
 #include "pipe.h"
+#include "queue.h"
+#include "queue_lossless.h"
+#include "queue_lossless_output.h"
 #include "roce_switch.h"
 #include "topology.h"
 #include <ostream>
@@ -51,26 +54,32 @@ public:
     uint32_t _nvSwitchesNum;
     uint32_t _switchesNum;
 
-    vector<Pipe*> _pipes;
-    vector<BaseQueue*> _queues;
     vector<RoceSrc*> _roceSrcs;
     vector<RoceSink*> _roceSinks;
     vector<Switch*> _switches;
+    vector<uint32_t> _nodesType;
     // vector<Switch*> _nvSwitches;
 
-    vector<vector< vector<BaseQueue*> > > queues;
-    vector<vector< vector<Pipe*> > > pipes;
+    map<int, map<int, vector<BaseQueue*> > > _queues;
+    map<int, map<int, vector<Pipe*> > > _pipes;
+    map<int, vector<uint32_t> > _neighbors;
+    map<int, map<int, vector<uint32_t> > > _nextHop;
 
     QueueLoggerFactory* _loggerFactory;
     EventList* _eventList;
 
     static simtime_picosec _hop_latency;
     static simtime_picosec _switch_latency;
+    static linkspeed_bps _linkSpeed;
+    static mem_b _queueSize;
 
     RoCETopology(const char * topoFile, QueueLoggerFactory* logger_factory, EventList& eventList);
+
+    void calculateRoutes();
+    void calculateRoutes(uint32_t host);
+
+    void setRoutingEntries();
 private:
-    linkspeed_bps linkSpeed;
-    mem_b queueSize;
 
 };
 
